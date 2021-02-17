@@ -17,7 +17,6 @@ M0_noYe=5./6.*np.sqrt(15.*pi)/np.power(alphaG,1.5)*mnuc/Msun
 R0_noYe=np.sqrt(15.*pi)/2./np.power(alphaG,0.5)*(hbar*c/me/np.power(c,2))/1e3
 rho_noYe=np.power(me*np.power(c,2)/hbar/c,3)*mnuc/(3.*np.power(pi,2))
 
-#HERE'S AN UNEXPECTED CHANGE
 #M0_noYe=10.6162
 #R0_noYe=17246.
 #rho_noYe=9.823608e8
