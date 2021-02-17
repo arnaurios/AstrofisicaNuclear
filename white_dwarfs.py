@@ -4,12 +4,7 @@
 # A FREE-FERMI GAS APPROXIMATION FOR THE EQUATION OF STATE ELECTRONS
 ##########################################################################
 import numpy as np
-import scipy as scipy
-import scipy.optimize
-import matplotlib
-import matplotlib
 import matplotlib.pyplot as plt
-
 
 # IMPORT PHYSICAL CONSTANTS FROM STORING FILE
 from physical_constants import *
