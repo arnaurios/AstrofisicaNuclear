@@ -1,7 +1,9 @@
 name: jupyterlab-requirements
+channels:
+  - conda-forge
 dependencies:
   - python=3
-  - jupyterlab=3
+  - jupyterlab
   - matplotlib
   - pandas
   - numpy
