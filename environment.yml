@@ -1,7 +1,8 @@
 name: jupyterlab-requirements
 dependencies:
-  - jupyterlab=3
+  - jupyterlab
+  - python
   - matplotlib
   - pandas
   - numpy
-  - python=3
+  - math
