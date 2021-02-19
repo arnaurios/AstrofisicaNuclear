@@ -15,9 +15,9 @@ from eos_functions import energy,derenergy
 ##########################################################################
 # KEY INPUTS TO THIS CODE
 # NUMBER OF CENTRAL DENSITIES (AND HENCE OF MASSES & RADII)
-number_central_density=20
+number_central_density=1
 # RANGE OF CENTRAL DENSITIES
-central_density_i=0.1
+central_density_i=1
 central_density_f=100.
 # DENSITIES DISTRIBUTED IN LOGARITHMIC STENCIL
 xfc_range=np.power(10,np.linspace(np.log10(central_density_i),np.log10(central_density_f),number_central_density))
