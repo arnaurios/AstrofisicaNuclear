@@ -1,3 +1,4 @@
+
 # coding: utf-8
 ##########################################################################
 # THIS PYTHON CODE SOLVES WHITE DWARF STRUCTURE EQUATIONS USING
@@ -11,7 +12,7 @@ import pandas as pd
 from physical_constants import *
 
 # IMPORT EQUATION-OF-STATE FUNCTIONS
-from eos_functions import energy,derenergy
+from eos_functions import *
 ##########################################################################
 # KEY INPUTS TO THIS CODE
 # NUMBER OF CENTRAL DENSITIES (AND HENCE OF MASSES & RADII)
@@ -79,16 +80,14 @@ for xfc in xfc_range :
     for iradial in range(0,iradial_max):
 # ... compute mass density, pressure, energy density
         dens=rho_noYe/Ye*np.power(xfold,3) # In Kg/m^3
-        ebar=energy(xfold)
-        derebar=derenergy(xfold)
-        pbar=-ebar+xfold*derebar/3.
+        pbar=pressure(xfold)
 
 # STORE IN ARRAY
         radial_coord[ ifc,iradial ]=rold*radial_units # IN METERS
         mass_profile[ ifc,iradial ]=mass_old*mass_units # IN SOLAR MASSES
         pres_profile[ ifc,iradial ]=pbar # IN
 
-        if number_central_density==1 : print(fmt.format(r_in_meters,xfold,mass_in_kg,dens,pbar,ebar))
+#        if number_central_density==1 : print(fmt.format(rold*radial_units,xfold,mass_old*mass_units,dens,pbar,ebar))
 
 # EULER STEP FORWARD
 
