@@ -55,18 +55,18 @@ print(txt.format(press_units))
 ncrust=2573    # points to consider from the crust file
 file_crust="./NS_EOS/crust.dat"
 # ... READ CRUST FILE
-eden_crust, pres_crust,rho_crust = np.loadtxt(file_crust,usecols=(0,1,2)).T
+eden_crust, pres_crust,den_crust = np.loadtxt(file_crust,usecols=(0,1,2)).T
 
 ncore=100      # points to consider from the core file
 file_core="./NS_EOS/EOS_npe_HHparam.dat"
-eden_core, pres_core,rho_core = np.loadtxt(file_core,usecols=(0,1,2)).T
+eden_core, pres_core,den_core = np.loadtxt(file_core,usecols=(0,1,2)).T
 
 
 # CONCATENATE ARRAYS
 nf=ncrust+ncore
 eden=np.concatenate((eden_crust,eden_core))
 pres=np.concatenate((pres_crust,pres_core))
-rho=np.concatenate((rho_crust,rho_core))
+numden=np.concatenate((den_crust,den_core))
 
 # TRANSFORM TO DIMENSIONLESS UNITS
 # Energy density and pressure from MeVfm-3 to dimensionless
@@ -74,9 +74,8 @@ conv1=np.power(mneut,4)/hbc3/3./np.power(pi,2)
 eden=eden/conv1
 pres=pres/conv1
 
-# Number density from fm-3 to dimensionless
-conv2=rho_noYe/mnuc_kg/1e45/0.16
-rho=rho/conv2
+# Number density in units of rho0
+numden=numden
 
 densmax=np.amax( eden )
 
@@ -96,14 +95,14 @@ number_coord=np.zeros( number_central_density,dtype=int )
 radial_coord=np.zeros( (number_central_density,iradial_max) )
 mass_profile=np.zeros( (number_central_density,iradial_max) )
 pres_profile=np.zeros( (number_central_density,iradial_max) )
+numden_profile=np.zeros( (number_central_density,iradial_max) )
 
 # FORMATS FOR OUTPUT
 fmt='{:12.4f} {:12.4f} {:12.4E} {:12.4E} {:12.4E} {:12.4E}'
 fmt_MR='# M={:6.3f} [M_sun] # R={:8.2f} [km]'
 
 # LOOP OVER CENTRAL DENSITY
-irhoc=0
-for xfc in xfc_range :
+for irhoc, xfc in enumerate(xfc_range) :
 
     # Numerical trick to provide a similar number of steps for all masses
     stepr=step_size/xfc#**(0.75)
@@ -113,6 +112,7 @@ for xfc in xfc_range :
     mass_old=0.
     dens_old=np.power(xfc,3)
     press_old=np.interp(dens_old,eden,pres)
+    numden_old=np.interp(dens_old,eden,numden)
     r_old=stepr
 
     if( dens_old >= densmax) :
@@ -127,6 +127,7 @@ for xfc in xfc_range :
         radial_coord[ irhoc,iradial ]=r_old*radial_units # IN METERS
         mass_profile[ irhoc,iradial ]=mass_old*mass_units # IN SOLAR MASSES
         pres_profile[ irhoc,iradial ]=press_old*press_units # IN
+        numden_profile[ irhoc,iradial ]=numden_old
 
 # EULER STEP FORWARD
         dm=np.power(r_old,2)*dens_old*stepr
@@ -148,6 +149,7 @@ for xfc in xfc_range :
         # USE FOR FFG
         #dens_old=invert_eos(press_new)
         dens_old=np.interp(press_new,pres,eden)
+        numden_old=np.interp(press_new,pres,numden)
 
         r_old=r_new
         mass_old=mass_new
@@ -166,28 +168,26 @@ for xfc in xfc_range :
     NS_mass[ irhoc ] = mass_old*mass_units
 
     print(fmt_MR.format(NS_mass[irhoc],NS_radius[irhoc]))
-    #print(number_coord[irhoc])
-
-    irhoc=irhoc+1
     # END LOOP OVER CENTRAL DENSITY
 
-# PLOT A MASS-RADIUS DIAGRAM, INCLUDING THE STAR'S PROFILE AS A FUNCTION OF r
-fig, (ax1,ax2) = plt.subplots(2,sharex=True)
+# PLOT A MASS-RADIUS DIAGRAM, INCLUDING THE STAR'S PRESSURE AND NUMBER DENSITY PROFILE AS A FUNCTION OF r
+fig, (ax1,ax2,ax3) = plt.subplots(3,sharex=True)
 for iplot in range(0,number_central_density) :
     ax1.plot(radial_coord[iplot,1:number_coord[iplot]], mass_profile[iplot,1:number_coord[iplot]],'c--',)
+    ax2.plot(radial_coord[iplot,1:number_coord[iplot]], numden_profile[iplot,1:number_coord[iplot]],'g-',)
+    ax3.semilogy(radial_coord[iplot,1:number_coord[iplot]], pres_profile[iplot,1:number_coord[iplot]],'g-',)
 
 ax1.plot( NS_radius,NS_mass,'o-')
-ax1.set(ylabel='Mass, $M$ / Mass profile, $m_<(r)$ [$M_\odot$]')
-#ax1.set_ylim([0,2.5])
 
-for iplot in range(0,number_central_density) :
-    ax2.semilogy(radial_coord[iplot,1:number_coord[iplot]], pres_profile[iplot,1:number_coord[iplot]],'g-',)
+ax1.set(ylabel='Mass, $m_<(r)$ [$M_\odot$]')
+ax1.set_ylim([0,2.5])
+ax2.set(ylabel='$n(r)/0.16$ []')
+ax2.set_ylim([0,10])
+ax3.set(ylabel='Pressure, $P(r)$ [Pa]')
+ax3.set_ylim([1e26,1e36])
 
-ax2.set(xlabel='Radial coordinate [km]')
-ax2.set(ylabel='Pressure profile, $P(r)$ [Pa]')
-
-ax2.set_xlim([0,20])
-ax2.set_ylim([1e26,1e40])
+ax3.set(xlabel='Radial coordinate [km]')
+ax3.set_xlim([0,20])
 
 plt.show()
 

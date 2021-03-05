@@ -51,7 +51,7 @@ print(txt.format(press_units))
 
 ##########################################################################
 # STEP SIZE OF INTEGRATION IN RADIAL COORDINATE
-step_size=1e-4
+step_size=2e-4
 # MAXIMUM NUMBER OF STEPS IN INTEGRATION
 iradial_max=int(10./step_size)
 
@@ -70,8 +70,7 @@ pres_profile=np.zeros( (number_central_density,iradial_max) )
 fmt_MR='# M={:6.3f} [M_sun] # R={:8.1f} [km]'
 
 # LOOP OVER CENTRAL DENSITY
-irhoc=0
-for xfc in xfc_range :
+for irhoc, xfc in enumerate( xfc_range) :
 
     # Numerical trick to provide a similar number of steps for all masses
     stepr=step_size/xfc**(0.75)
@@ -119,9 +118,7 @@ for xfc in xfc_range :
     WD_mass[ irhoc ] = mass_old*mass_units
 
     print(fmt_MR.format(WD_mass[irhoc],WD_radius[irhoc]))
-
-    irhoc=irhoc+1
-    # END LOOP OVER CENTRAL DENSITY
+# END LOOP OVER CENTRAL DENSITY
 
 # PLOT A MASS-RADIUS DIAGRAM, INCLUDING THE STAR'S PROFILE AS A FUNCTION OF r
 fig, (ax1,ax2) = plt.subplots(2,sharex=True)
