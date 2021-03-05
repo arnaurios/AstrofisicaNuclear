@@ -146,8 +146,6 @@ for irhoc, xfc in enumerate(xfc_range) :
         mass_new=mass_old+dm
         r_new=r_old+stepr
 
-        # USE FOR FFG
-        #dens_old=invert_eos(press_new)
         dens_old=np.interp(press_new,pres,eden)
         numden_old=np.interp(press_new,pres,numden)
 
