@@ -80,25 +80,13 @@ rhon=numden*(1.-xp)
 xn=1.-xp
 
 # energy density (baryonic part)   in MeV fm-3
-edens_n=np.zeros(num_densities)
 edens_n=enuc*numden + rhon*mneut + rhop*mprot
 
 # Calculating the pressure from (total) derivative of energy density (baryonic part)
-p_nuc=np.zeros(num_densities)
-for iden in range(1,num_densities-1) :
-    p_nuc[iden]=numden[iden]*(edens_n[iden+1]-edens_n[iden-1])/(numden[iden+1]-numden[iden-1])-edens_n[iden]
-
-# LINEAR INTERPOLATION TO numden[0] POINT
-Ntarget=0
-Ni=1
-Nf=2
-p_nuc[Ntarget]=p_nuc[Ni] + (numden[Ntarget]-numden[Ni])*(p_nuc[Nf]-p_nuc[Ni])/(numden[Nf]-numden[Ni])
-
-# LINEAR INTERPOLATION TO numden[NMAX] POINT
-Ntarget=num_densities-1
-Ni=num_densities-2
-Nf=num_densities-3
-p_nuc[Ntarget]=p_nuc[Ni] + (numden[Ntarget]-numden[Ni])*(p_nuc[Nf]-p_nuc[Ni])/(numden[Nf]-numden[Ni])
+pres0=-e0*(n0-numden)*np.power(numden,2)*( (2.+delta)*n0 + delta*numden )
+pres0=pres0/( n0*np.power( n0+delta*numden,2 ) )
+pres1=s0*gamma*np.power(n0,-gamma)*np.power( (rhon - rhop),2 )*np.power(numden,gamma-1.)
+p_nuc=pres0+pres1
 
 ##############################################################################
 # PREPARE LEPTON CONTRIBUTION
@@ -140,6 +128,7 @@ p_lep=p_el+p_mu
 # ADD CONTRIBUTIONS OF NUCLEONS, ELECTRONS AND MUONS
 edens=edens_n + edens_l
 press=p_nuc + p_lep
+
 
 # EXPORTS DATA TO SCREEN
 #fmt_out='{:11.6f} {:11.6f} {:11.6f} {:11.6f} {:11.6f} {:11.6f} {:11.6f} {:11.6f}'
