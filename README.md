@@ -9,4 +9,4 @@ This folder includes  python codes to solve for:
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/arnaurios/AstrofisicaNuclear/HEAD?filepath=Neutron_Stars.ipynb)
 
 3) The beta equilibrium conditions in the interior of Neutron Stars. This can be accessed in the following JupyterLab notebook powered by Binder here
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/arnaurios/AstrofisicaNuclear/HEAD?filepath=Beta_Equilibrium.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/arnaurios/AstrofisicaNuclear/HEAD?filepath=Beta_equilibrium.ipynb)
