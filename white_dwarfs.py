@@ -100,7 +100,7 @@ for irhoc, xfc in enumerate( xfc_range) :
         r_new=r_old+stepr
         x=invert_eos(press_new)
         dens_old=np.power(x,3)
-        
+
         r_old=r_new
         mass_old=mass_new
         press_old=press_new
