@@ -1,7 +1,7 @@
 # DATA FROM Tremblay et al. 2016 10.1093/mnras/stw2854
 # Compares MASSES AND RADII FROM SATELLITES HIPPARCOS (MassH) AND GAIA (MassG)
 # Units of Mass: [M_sun]
-# Units of Radius: [0.01R_sun=6.96340 km]
+# Units of Radius: [0.01R_sun]
 Sample,Name,MassH,e_MassH,RadH,e_RadH,MassG,e_MassG,RadG,e_RadG,RadMRR,e_RadMRR
 D,"0148+467",0.612,0.088,1.237,0.068,,,,,1.259,0.034
 D,"0227+050",0.597,0.182,1.387,0.196,,,,,1.372,0.048
